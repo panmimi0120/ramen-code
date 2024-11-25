@@ -1,0 +1,19 @@
+from sklearn.ensemble import RandomForestClassifier
+
+# ランダムフォレストのハイパーパラメータ調整
+rf_model_tuned = RandomForestClassifier(
+    n_estimators=100,        # 木の数
+    max_depth=10,            # 最大深さ
+    min_samples_split=10,    # 最小サンプル数（分割時）
+    min_samples_leaf=5,      # 最小サンプル数（葉）
+    random_state=42
+)
+# 学習
+rf_model_tuned.fit(X_train, y_train)
+# 予測
+y_pred_rf_tuned = rf_model_tuned.predict(X_test)
+# メトリクスの計算
+rf_tuned_accuracy = accuracy_score(y_test, y_pred_rf_tuned)
+rf_tuned_precision = precision_score(y_test, y_pred_rf_tuned)
+rf_tuned_recall = recall_score(y_test, y_pred_rf_tuned)
+rf_tuned_f1 = f1_score(y_test, y_pred_rf_tuned)
