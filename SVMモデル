@@ -1,0 +1,13 @@
+from sklearn.svm import SVC
+# SVMのハイパーパラメータ調整
+svm_model_tuned = SVC(C=1, kernel='rbf', gamma='scale', random_state=42)
+# 学習
+svm_model_tuned.fit(X_train, y_train)
+# 予測
+y_pred_svm_tuned = svm_model_tuned.predict(X_test)
+# メトリクスの計算
+svm_tuned_accuracy = accuracy_score(y_test, y_pred_svm_tuned)
+svm_tuned_precision = precision_score(y_test, y_pred_svm_tuned)
+svm_tuned_recall = recall_score(y_test, y_pred_svm_tuned)
+svm_tuned_f1 = f1_score(y_test, y_pred_svm_tuned)
+
