@@ -1,0 +1,29 @@
+# 席数列で数値に変換可能なデータのみを抽出
+df_clean = df_clean[df_clean['席数'].str.contains('^[0-9]+席$', regex=True)]
+
+# 席数列から「席」を削除して数値に変換
+df_clean['席数'] = df_clean['席数'].str.replace('席', '').astype(float)
+
+# 再度回帰分析を実行
+X = df_clean[['個室有無', '駐車場有無', '席数']]
+y = df_clean['評価']
+
+# データを訓練用とテスト用に分割
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# 線形回帰モデルを適用
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# テストデータを用いて予測
+y_pred = model.predict(X_test)
+
+# モデルの性能評価
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# 回帰係数を取得
+coefficients = pd.DataFrame({'Variable': X.columns, 'Coefficient': model.coef_})
+
+# 結果を表示
+mse, r2, coefficients
