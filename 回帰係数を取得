@@ -1,0 +1,32 @@
+# 「コメント数」と「保存数」から「人」を削除し、数値に変換
+df_selected_additional['コメント数'] = df_selected_additional['コメント数'].str.replace('人', '').astype(float)
+df_selected_additional['保存数'] = df_selected_additional['保存数'].str.replace('人', '').astype(float)
+
+# 欠損値を削除
+df_clean_additional = df_selected_additional.dropna()
+
+# 再度回帰分析を実行
+X_additional = df_clean_additional.drop(columns=['評価'])
+y_additional = df_clean_additional['評価']
+
+# データを訓練用とテスト用に分割
+X_train_additional, X_test_additional, y_train_additional, y_test_additional = train_test_split(X_additional, y_additional, test_size=0.3, random_state=42)
+
+# 線形回帰モデルを適用
+model_additional = LinearRegression()
+model_additional.fit(X_train_additional, y_train_additional)
+
+# テストデータを用いて予測
+y_pred_additional = model_additional.predict(X_test_additional)
+
+# モデルの性能評価
+mse_additional = mean_squared_error(y_test_additional, y_pred_additional)
+r2_additional = r2_score(y_test_additional, y_pred_additional)
+
+# 回帰係数を取得
+coefficients_additional = pd.DataFrame({'Variable': X_additional.columns, 'Coefficient': model_additional.coef_})
+
+import ace_tools as tools; tools.display_dataframe_to_user(name="追加の回帰係数", dataframe=coefficients_additional)
+
+# 結果を表示
+mse_additional, r2_additional, coefficients_additional
